@@ -3,193 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance & Web Tool Hub | Universal Loan Calc & Image Optimizer</title>
-    <meta name="description" content="Calculate Monthly EMI, Loan Amount, and Tenure for millions. Optimize and compress images online for free. The ultimate all-in-one web utility.">
+    <title>SmartTool Hub | Loan, Image & PDF Toolkit</title>
+    <meta name="description" content="Free online tools: Loan EMI calculator, Image compressor, and PDF merger. All-in-one professional toolkit.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_CLIENT_ID" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        :root { --primary: #1e293b; --accent: #3b82f6; --success: #10b981; --bg: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: #334155; }
-        .nav { background: white; padding: 1rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .container { max-width: 900px; margin: 20px auto; padding: 20px; }
+        :root { --primary: #0f172a; --accent: #2563eb; --bg: #f1f5f9; --text: #334155; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; color: var(--text); }
         
-        /* AD SLOTS */
-        .ad-space { background: #e2e8f0; margin: 20px 0; text-align: center; padding: 10px; border-radius: 8px; min-height: 90px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #94a3b8; }
+        /* Sidebar Navigation */
+        .sidebar { width: 260px; background: var(--primary); height: 100vh; color: white; position: fixed; padding: 20px; box-sizing: border-box; }
+        .sidebar h2 { font-size: 1.2rem; margin-bottom: 30px; color: #38bdf8; }
+        .nav-link { padding: 12px; display: block; color: #94a3b8; text-decoration: none; border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background: #1e293b; color: white; }
 
-        .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin-bottom: 30px; }
-        h2 { color: var(--primary); margin-top: 0; border-left: 5px solid var(--accent); padding-left: 15px; }
+        .main-content { margin-left: 260px; width: 100%; padding: 40px; box-sizing: border-box; }
+        .tool-section { display: none; max-width: 700px; margin: 0 auto; }
+        .tool-section.active { display: block; }
 
-        /* LOAN CALCULATOR UI */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; background: #f1f5f9; padding: 5px; border-radius: 12px; }
-        .tab-btn { flex: 1; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .tab-btn.active { background: white; color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; }
         
-        .input-box { margin-bottom: 15px; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
-        
-        .res-box { background: var(--primary); color: white; padding: 20px; border-radius: 15px; margin-top: 20px; display: none; }
-        
-        /* IMAGE COMPRESSOR UI */
-        .drop-zone { border: 2px dashed #cbd5e1; padding: 40px; text-align: center; border-radius: 15px; cursor: pointer; transition: 0.3s; }
-        .drop-zone:hover { border-color: var(--accent); background: #eff6ff; }
-        #preview { max-width: 100%; margin-top: 20px; border-radius: 10px; display: none; }
+        button { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .ad-slot { background: #e2e8f0; height: 90px; margin: 20px 0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
 
-        .btn-calc { width: 100%; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .hidden { display: none; }
-
-        footer { text-align: center; padding: 40px; font-size: 0.9rem; color: #64748b; }
+        /* PDF Styles */
+        .file-list { margin: 15px 0; font-size: 0.9rem; background: #f8fafc; padding: 10px; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<div class="nav">
-    <strong>SmartTool Hub</strong>
+<div class="sidebar">
+    <h2>SmartTool Hub</h2>
+    <div class="nav-link active" onclick="showTool('loan', this)">💰 Loan Calculator</div>
+    <div class="nav-link" onclick="showTool('image', this)">🖼️ Image Optimizer</div>
+    <div class="nav-link" onclick="showTool('pdf', this)">📄 PDF Merger</div>
 </div>
 
-<div class="container">
-    <div class="ad-space">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_CLIENT_ID" data-ad-slot="YOUR_AD_UNIT_ID" data-ad-format="auto"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+<div class="main-content">
+    <div class="ad-slot">ADSENSE_TOP_UNIT</div>
 
-    <div class="card">
-        <h2>Universal Loan Analyzer</h2>
-        <div class="tabs">
-            <button class="tab-btn active" onclick="setMode('emi', this)">Monthly EMI</button>
-            <button class="tab-btn" onclick="setMode('amount', this)">Loan Amount</button>
-            <button class="tab-btn" onclick="setMode('tenure', this)">Tenure</button>
-        </div>
-
-        <div id="f-amt" class="input-box"><label>Loan Amount ($)</label><input type="number" id="v-amt" placeholder="e.g. 5000000"></div>
-        <div class="input-box"><label>Interest Rate (% Annual)</label><input type="number" id="v-rate" step="0.1" placeholder="e.g. 8.5"></div>
-        <div id="f-ten" class="input-box"><label>Tenure (Years)</label><input type="number" id="v-ten" placeholder="e.g. 20"></div>
-        <div id="f-emi" class="input-box hidden"><label>Monthly Payment ($)</label><input type="number" id="v-emi" placeholder="e.g. 1500"></div>
-        
-        <button class="btn-calc" onclick="runCalc()">Calculate Results</button>
-
-        <div id="loan-res" class="res-box">
-            <p id="res-label" style="color: #94a3b8; margin:0">Result</p>
-            <h1 id="res-val" style="margin: 5px 0; color: var(--success);">$0.00</h1>
-            <div style="display: flex; gap: 20px; font-size: 0.9rem;">
-                <div>Interest: <span id="res-int"></span></div>
-                <div>Total: <span id="res-total"></span></div>
+    <div id="loan" class="tool-section active">
+        <div class="card">
+            <h2>Loan Calculator</h2>
+            <div class="input-group">
+                <label>Loan Amount ($)</label>
+                <input type="number" id="l-amt" placeholder="1000000">
+            </div>
+            <div class="input-group">
+                <label>Interest Rate (%)</label>
+                <input type="number" id="l-rate" step="0.1" placeholder="7.5">
+            </div>
+            <div class="input-group">
+                <label>Tenure (Years)</label>
+                <input type="number" id="l-ten" placeholder="20">
+            </div>
+            <button onclick="calcLoan()">Calculate</button>
+            <div id="loan-res" style="margin-top:20px; display:none; border-top:1px solid #eee; padding-top:20px;">
+                <h3 id="emi-val" style="color:var(--accent); margin:0;"></h3>
+                <p id="total-val" style="margin:5px 0;"></p>
             </div>
         </div>
     </div>
 
-    <div class="ad-space">AD_UNIT_PLACEHOLDER</div>
-
-    <div class="card">
-        <h2>Image Optimizer & Compressor</h2>
-        <div class="input-box">
-            <label>Compression Level (Lower = Smaller File)</label>
-            <select id="quality">
-                <option value="0.9">High Quality (90%)</option>
-                <option value="0.7" selected>Balanced (70%)</option>
-                <option value="0.5">Medium Compression (50%)</option>
-                <option value="0.2">High Compression (20%)</option>
+    <div id="image" class="tool-section">
+        <div class="card">
+            <h2>Image Compressor</h2>
+            <label>Compression Level</label>
+            <select id="img-quality" style="margin-bottom:20px;">
+                <option value="0.7">Recommended (70%)</option>
+                <option value="0.4">Smallest File (40%)</option>
             </select>
+            <input type="file" id="img-in" accept="image/*" onchange="processImg()">
+            <div id="img-preview" style="margin-top:20px;"></div>
         </div>
-        <div class="drop-zone" onclick="document.getElementById('img-input').click()">
-            <p>Click to upload or Drag & Drop Image</p>
-            <input type="file" id="img-input" accept="image/*" class="hidden" onchange="compressImg(event)">
-        </div>
-        <img id="preview" alt="Compressed Preview">
-        <div id="img-info" style="margin-top: 15px; font-weight: bold;"></div>
-        <a id="download-link" class="btn-calc hidden" style="text-align: center; text-decoration: none; display: block; background: var(--success);">Download Optimized Image</a>
     </div>
 
-    <div class="card" style="font-size: 0.95rem; line-height: 1.6;">
-        <h3>Why use our tools?</h3>
-        <p>Our <strong>universal loan calculator</strong> handles multi-million dollar business and personal loans with ease. Unlike basic tools, we allow you to solve for the loan principal or tenure based on your monthly budget.</p>
-        <p>Our <strong>image optimizer</strong> works directly in your browser. This means your images are never uploaded to a server, ensuring 100% privacy while helping you speed up your own website performance.</p>
+    <div id="pdf" class="tool-section">
+        <div class="card">
+            <h2>Merge PDF Files</h2>
+            <p>Select two or more PDF files to combine them into one.</p>
+            <input type="file" id="pdf-in" accept="application/pdf" multiple style="margin-bottom:20px;">
+            <div id="pdf-list" class="file-list">No files selected</div>
+            <button onclick="mergePDFs()">Merge & Download PDF</button>
+        </div>
     </div>
 
-    <div class="ad-space">AD_UNIT_PLACEHOLDER</div>
+    <div class="ad-slot">ADSENSE_BOTTOM_UNIT</div>
 </div>
 
-<footer>
-    <p>&copy; 2025 SmartTool Hub</p>
-    <a href="privacy.html">Privacy Policy</a> | <a href="about.html">About</a> | <a href="contact.html">Contact</a>
-</footer>
-
 <script>
-    // LOAN LOGIC
-    let mode = 'emi';
-    function setMode(m, b) {
-        mode = m;
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        b.classList.add('active');
-        document.getElementById('f-amt').classList.toggle('hidden', m === 'amount');
-        document.getElementById('f-ten').classList.toggle('hidden', m === 'tenure');
-        document.getElementById('f-emi').classList.toggle('hidden', m === 'emi');
-        document.getElementById('loan-res').style.display = 'none';
+    // Navigation Logic
+    function showTool(id, el) {
+        document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
     }
 
-    function runCalc() {
-        const P = parseFloat(document.getElementById('v-amt').value);
-        const R = parseFloat(document.getElementById('v-rate').value) / 1200;
-        const Y = parseFloat(document.getElementById('v-ten').value) * 12;
-        const E = parseFloat(document.getElementById('v-emi').value);
-        const fmt = (v) => v.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
-
-        let main, total, interest;
-
-        if(mode === 'emi') {
-            let x = Math.pow(1 + R, Y);
-            let emi = (P * x * R) / (x - 1);
-            main = fmt(emi); total = emi * Y; interest = total - P;
-            document.getElementById('res-label').innerText = "Monthly EMI";
-        } else if(mode === 'amount') {
-            let x = Math.pow(1 + R, Y);
-            let amt = (E * (x - 1)) / (x * R);
-            main = fmt(amt); total = E * Y; interest = total - amt;
-            document.getElementById('res-label').innerText = "Affordable Loan Amount";
-        } else if(mode === 'tenure') {
-            let n = Math.log(E / (E - P * R)) / Math.log(1 + R);
-            main = (n/12).toFixed(1) + " Years"; total = E * n; interest = total - P;
-            document.getElementById('res-label').innerText = "Required Tenure";
-        }
-
-        document.getElementById('res-val').innerText = main;
-        document.getElementById('res-int').innerText = fmt(interest);
-        document.getElementById('res-total').innerText = fmt(total);
+    // LOAN LOGIC
+    function calcLoan() {
+        const p = parseFloat(document.getElementById('l-amt').value);
+        const r = parseFloat(document.getElementById('l-rate').value) / 1200;
+        const n = parseFloat(document.getElementById('l-ten').value) * 12;
+        const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        
+        document.getElementById('emi-val').innerText = "Monthly EMI: $" + emi.toLocaleString(undefined, {maximumFractionDigits:2});
+        document.getElementById('total-val').innerText = "Total Payback: $" + (emi * n).toLocaleString();
         document.getElementById('loan-res').style.display = 'block';
     }
 
-    // IMAGE COMPRESSOR LOGIC
-    function compressImg(e) {
-        const file = e.target.files[0];
-        const quality = parseFloat(document.getElementById('quality').value);
-        if(!file) return;
+    // PDF MERGE LOGIC
+    async function mergePDFs() {
+        const files = document.getElementById('pdf-in').files;
+        if (files.length < 2) { alert("Please select at least 2 PDF files"); return; }
 
+        const mergedPdf = await PDFLib.PDFDocument.create();
+        for (const file of files) {
+            const content = await file.arrayBuffer();
+            const pdf = await PDFLib.PDFDocument.load(content);
+            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+            copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+
+        const pdfBytes = await mergedPdf.save();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "merged_document.pdf";
+        link.click();
+    }
+
+    // IMAGE COMPRESS LOGIC (Simplified for speed)
+    function processImg() {
+        const file = document.getElementById('img-in').files[0];
+        const quality = parseFloat(document.getElementById('img-quality').value);
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = function(event) {
+        reader.onload = (e) => {
             const img = new Image();
-            img.src = event.target.result;
-            img.onload = function() {
+            img.src = e.target.result;
+            img.onload = () => {
                 const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                
-                const newData = canvas.toDataURL('image/jpeg', quality);
-                const preview = document.getElementById('preview');
-                preview.src = newData;
-                preview.style.display = 'block';
-
-                const download = document.getElementById('download-link');
-                download.href = newData;
-                download.download = "optimized_" + file.name;
-                download.classList.remove('hidden');
-
-                document.getElementById('img-info').innerText = `Done! Compressed for ${quality * 100}% quality.`;
-            }
-        }
+                canvas.width = img.width; canvas.height = img.height;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                const data = canvas.toDataURL('image/jpeg', quality);
+                document.getElementById('img-preview').innerHTML = `<img src="${data}" style="width:100%; border-radius:8px;"><br><a href="${data}" download="optimized.jpg">Download Optimized Image</a>`;
+            };
+        };
     }
 </script>
 </body>

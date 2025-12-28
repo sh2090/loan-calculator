@@ -3,207 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Finance - Ultimate Loan Toolkit</title>
+    <title>Enterprise Loan Pro | Millions & Flexible Tenure</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --secondary: #6366f1;
-            --accent: #10b981;
-            --bg: #f3f4f6;
-            --card: #ffffff;
+            --primary: #0f172a; /* Deep elegant navy */
+            --accent: #2563eb;  /* Trusting blue */
+            --success: #059669; /* Money green */
+            --bg: #f8fafc;
         }
 
         body { 
-            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
-            background-color: var(--bg); 
-            display: flex; justify-content: center; padding: 40px 20px;
-            color: #1f2937;
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: #1e293b; 
+            display: flex; flex-direction: column; align-items: center; padding: 40px 20px;
         }
 
-        .wrapper { width: 100%; max-width: 480px; }
+        .container { width: 100%; max-width: 550px; }
 
-        .calculator-card {
-            background: var(--card);
-            padding: 32px;
-            border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .calc-card {
+            background: white; padding: 40px; border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
         }
 
-        h2 { text-align: center; margin-bottom: 8px; font-weight: 800; color: #111827; }
-        p.subtitle { text-align: center; color: #6b7280; font-size: 0.9rem; margin-bottom: 24px; }
+        h2 { margin: 0 0 10px; font-size: 1.8rem; color: var(--primary); text-align: center; }
+        p.desc { text-align: center; color: #64748b; margin-bottom: 30px; font-size: 0.95rem; }
 
-        /* Tabs for selecting mode */
-        .tabs {
-            display: flex;
-            background: #f3f4f6;
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-        }
-
-        .tab {
-            flex: 1; text-align: center; padding: 10px; cursor: pointer;
-            border-radius: 10px; font-size: 0.85rem; font-weight: 600;
-            transition: 0.2s; color: #6b7280;
-        }
-
-        .tab.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-
-        .input-box { margin-bottom: 18px; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #374151; }
+        .input-group { margin-bottom: 24px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
         
-        input {
-            width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 12px;
-            font-size: 1rem; box-sizing: border-box; transition: all 0.2s;
+        /* Input styling for big numbers */
+        .input-wrapper { position: relative; }
+        .input-wrapper span { position: absolute; left: 16px; top: 12px; color: #94a3b8; font-weight: 600; }
+        input { 
+            width: 100%; padding: 12px 16px 12px 35px; border: 2px solid #f1f5f9; 
+            border-radius: 12px; font-size: 1.1rem; box-sizing: border-box;
+            background: #f8fafc; transition: all 0.2s;
         }
+        input:focus { outline: none; border-color: var(--accent); background: white; }
 
-        input:focus { outline: none; border-color: var(--primary); ring: 3px solid rgba(79, 70, 229, 0.1); }
-
-        button {
-            width: 100%; padding: 16px; background: var(--primary); color: white;
-            border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
-            cursor: pointer; margin-top: 10px; transition: 0.3s;
+        /* Tenure Selector */
+        .tenure-toggle { display: flex; gap: 10px; margin-bottom: 10px; }
+        .t-btn { 
+            flex: 1; padding: 8px; border: 1px solid #e2e8f0; border-radius: 8px; 
+            background: white; cursor: pointer; font-size: 0.8rem; font-weight: 600;
         }
+        .t-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        button:hover { background: var(--secondary); transform: translateY(-1px); }
-
-        .results {
-            margin-top: 24px; padding-top: 24px; border-top: 1px dashed #e5e7eb;
-            display: none;
+        button.calc-btn {
+            width: 100%; padding: 16px; background: var(--accent); color: white;
+            border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; transition: transform 0.1s;
         }
+        button.calc-btn:active { transform: scale(0.98); }
 
-        .result-main { text-align: center; margin-bottom: 16px; }
-        .result-main .label { font-size: 0.8rem; color: #6b7280; text-transform: uppercase; }
-        .result-main .value { font-size: 2rem; font-weight: 800; color: var(--accent); display: block; }
+        /* Results Display */
+        .results-box { 
+            margin-top: 35px; border-radius: 20px; background: var(--primary); 
+            color: white; padding: 30px; display: none;
+        }
+        .main-res { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 20px; }
+        .main-res span { font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; }
+        .main-res h1 { font-size: 2.5rem; margin: 10px 0 0; color: #fff; }
 
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .stat-card { background: #f9fafb; padding: 12px; border-radius: 12px; text-align: center; }
-        .stat-card span { font-size: 0.75rem; color: #6b7280; }
-        .stat-card b { display: block; font-size: 1rem; color: #111827; }
+        .grid-res { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .res-item span { font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 5px; }
+        .res-item b { font-size: 1.1rem; }
 
-        .hidden { display: none; }
+        footer { margin-top: 40px; text-align: center; font-size: 0.8rem; }
+        footer a { color: var(--accent); text-decoration: none; margin: 0 10px; }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <div class="calculator-card">
-        <h2>Smart Loan Calc</h2>
-        <p class="subtitle">Calculate EMI, Tenure, or Loan Amount</p>
+<div class="container">
+    <div class="calc-card">
+        <h2>Loan Analyzer Pro</h2>
+        <p class="desc">Calculate personal, business, or jumbo loans up to $100M+.</p>
 
-        <div class="tabs">
-            <div class="tab active" onclick="switchMode('emi', this)">Monthly EMI</div>
-            <div class="tab" onclick="switchMode('tenure', this)">Tenure</div>
-            <div class="tab" onclick="switchMode('amount', this)">Amount</div>
-        </div>
-
-        <div id="field-amount" class="input-box">
-            <label>Loan Amount ($)</label>
-            <input type="number" id="val-amount" placeholder="e.g. 50000">
-        </div>
-
-        <div class="input-box">
-            <label>Interest Rate (% Annual)</label>
-            <input type="number" id="val-interest" step="0.01" placeholder="e.g. 8.5">
-        </div>
-
-        <div id="field-emi" class="input-box hidden">
-            <label>Monthly EMI ($)</label>
-            <input type="number" id="val-emi" placeholder="e.g. 1200">
-        </div>
-
-        <div id="field-tenure" class="input-box">
-            <label>Tenure (Years)</label>
-            <input type="number" id="val-tenure" placeholder="e.g. 5">
-        </div>
-
-        <button onclick="calculate()">Calculate Results</button>
-
-        <div id="resultSection" class="results">
-            <div class="result-main">
-                <span id="res-label" class="label">Monthly Payment</span>
-                <span id="res-value" class="value">$0.00</span>
+        <div class="input-group">
+            <label>Total Loan Amount</label>
+            <div class="input-wrapper">
+                <span>$</span>
+                <input type="number" id="amount" placeholder="e.g. 1,000,000">
             </div>
-            <div class="stats">
-                <div class="stat-card">
-                    <span>Total Interest</span>
-                    <b id="res-interest">$0</b>
+        </div>
+
+        <div class="input-group">
+            <label>Annual Interest Rate (%)</label>
+            <div class="input-wrapper">
+                <span style="left: auto; right: 16px;">%</span>
+                <input type="number" id="interest" step="0.01" placeholder="e.g. 5.25" style="padding-left: 16px;">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Loan Tenure</label>
+            <div class="tenure-toggle">
+                <button id="btn-years" class="t-btn active" onclick="setTenureMode('years')">Years</button>
+                <button id="btn-months" class="t-btn" onclick="setTenureMode('months')">Months</button>
+            </div>
+            <input type="number" id="tenureValue" placeholder="e.g. 30" style="padding-left: 16px;">
+        </div>
+
+        <button class="calc-btn" onclick="calculate()">Calculate Payment</button>
+
+        <div id="results" class="results-box">
+            <div class="main-res">
+                <span>Monthly Installment (EMI)</span>
+                <h1 id="emi-out">$0.00</h1>
+            </div>
+            <div class="grid-res">
+                <div class="res-item">
+                    <span>Total Interest Paid</span>
+                    <b id="interest-out">$0</b>
                 </div>
-                <div class="stat-card">
-                    <span>Total Payback</span>
-                    <b id="res-total">$0</b>
+                <div class="res-item">
+                    <span>Total Repayment</span>
+                    <b id="total-out">$0</b>
                 </div>
             </div>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2025 Smart Loan Calc</p>
+        <a href="index.html">Home</a> | <a href="privacy.html">Privacy Policy</a> | <a href="mailto:sh2090@gmail.com">Contact</a>
+    </footer>
 </div>
 
 <script>
-    let currentMode = 'emi';
+    let tenureMode = 'years';
 
-    function switchMode(mode, el) {
-        currentMode = mode;
-        // Update Tabs
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-
-        // Toggle Fields
-        document.getElementById('field-amount').classList.toggle('hidden', mode === 'amount');
-        document.getElementById('field-emi').classList.toggle('hidden', mode !== 'amount' && mode !== 'tenure');
-        document.getElementById('field-tenure').classList.toggle('hidden', mode === 'tenure');
-        
-        // Clear results
-        document.getElementById('resultSection').style.display = 'none';
+    function setTenureMode(mode) {
+        tenureMode = mode;
+        document.getElementById('btn-years').classList.toggle('active', mode === 'years');
+        document.getElementById('btn-months').classList.toggle('active', mode === 'months');
+        document.getElementById('tenureValue').placeholder = mode === 'years' ? "e.g. 30" : "e.g. 360";
     }
 
     function calculate() {
-        const amount = parseFloat(document.getElementById('val-amount').value);
-        const interest = parseFloat(document.getElementById('val-interest').value) / 100 / 12;
-        const tenure = parseFloat(document.getElementById('val-tenure').value) * 12;
-        const emiInput = parseFloat(document.getElementById('val-emi').value);
+        const p = parseFloat(document.getElementById('amount').value);
+        const r = parseFloat(document.getElementById('interest').value) / 1200; // Monthly decimal rate
+        let n = parseFloat(document.getElementById('tenureValue').value);
 
-        let resLabel, resValue, totalInterest, totalPayback;
+        if (tenureMode === 'years') n = n * 12; // Convert years to months
 
-        if (currentMode === 'emi') {
-            const x = Math.pow(1 + interest, tenure);
-            const emi = (amount * x * interest) / (x - 1);
-            resLabel = "Monthly EMI";
-            resValue = emi;
-            totalPayback = emi * tenure;
-            totalInterest = totalPayback - amount;
-        } 
-        else if (currentMode === 'tenure') {
-            // Formula for n (tenure)
-            const n = Math.log(emiInput / (emiInput - amount * interest)) / Math.log(1 + interest);
-            resLabel = "Tenure (Months)";
-            resValue = n;
-            totalPayback = emiInput * n;
-            totalInterest = totalPayback - amount;
-        }
-        else if (currentMode === 'amount') {
-            const x = Math.pow(1 + interest, tenure);
-            const p = (emiInput * (x - 1)) / (x * interest);
-            resLabel = "Max Loan Amount";
-            resValue = p;
-            totalPayback = emiInput * tenure;
-            totalInterest = totalPayback - p;
-        }
+        if (p > 0 && r > 0 && n > 0) {
+            // Formula: EMI = [P x R x (1+R)^N]/[(1+R)^N-1]
+            const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            const totalPayable = emi * n;
+            const totalInterest = totalPayable - p;
 
-        if (isFinite(resValue) && resValue > 0) {
-            document.getElementById('res-label').innerText = resLabel;
-            document.getElementById('res-value').innerText = currentMode === 'tenure' ? resValue.toFixed(1) : '$' + resValue.toLocaleString(undefined, {maximumFractionDigits: 0});
-            document.getElementById('res-interest').innerText = '$' + totalInterest.toLocaleString(undefined, {maximumFractionDigits: 0});
-            document.getElementById('res-total').innerText = '$' + totalPayback.toLocaleString(undefined, {maximumFractionDigits: 0});
-            document.getElementById('resultSection').style.display = 'block';
+            // Formatting with commas for Millions
+            const fmt = (val) => '$' + val.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            document.getElementById('emi-out').innerText = fmt(emi);
+            document.getElementById('interest-out').innerText = fmt(totalInterest);
+            document.getElementById('total-out').innerText = fmt(totalPayable);
+            
+            document.getElementById('results').style.display = 'block';
         } else {
-            alert("Invalid Input. Please check your numbers.");
+            alert("Please enter valid loan details.");
         }
     }
 </script>
-<footer style="margin-top: 50px; text-align: center; font-size: 0.8rem; color: #6b7280; padding-bottom: 20px;">
-    <p>&copy; 2025 Smart Loan Calc. All rights reserved.</p>
-    <a href="privacy.html" style="color: #4f46e5; text-decoration: none;">Privacy Policy</a> | 
-    <a href="mailto:your-email@example.com" style="color: #4f46e5; text-decoration: none;">Contact Us</a>
-</footer>
 </body>
 </html>

@@ -3,53 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Personal Loan Calculator</title>
+    <title>Advanced Personal Loan Calculator</title>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 50px; }
-        .calc-card { background: white; padding: 30px; border-radius: 8px; shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #2c3e50; text-align: center; }
-        label { display: block; margin: 15px 0 5px; font-weight: bold; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 4px; margin-top: 20px; cursor: pointer; font-size: 16px; }
-        .result { margin-top: 25px; padding: 15px; background: #e8f8f5; border-radius: 4px; text-align: center; display: none; }
-        .result h3 { margin: 0; color: #16a085; }
+        :root {
+            --primary: #2563eb;
+            --success: #059669;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        
+        /* Layout Container */
+        .container { width: 100%; max-width: 500px; margin-top: 30px; }
+        
+        .calc-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        
+        h2 { text-align: center; margin-bottom: 25px; color: var(--primary); font-size: 1.5rem; }
+        
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        input { 
+            width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; 
+            box-sizing: border-box; font-size: 1rem; transition: border-color 0.3s;
+        }
+        input:focus { outline: none; border-color: var(--primary); }
+        
+        button { 
+            width: 100%; padding: 14px; background: var(--primary); color: white; 
+            border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold;
+            transition: transform 0.1s, background 0.3s;
+        }
+        button:hover { background: #1d4ed8; }
+        button:active { transform: scale(0.98); }
+
+        /* Results Styling */
+        .result-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; 
+            display: none; /* Hidden until calculation */
+        }
+        .result-item { 
+            background: #f1f5f9; padding: 15px; border-radius: 10px; text-align: center; 
+        }
+        .full-width { grid-column: span 2; background: #dcfce7; border: 1px solid #bbf7d0; }
+        .label-sm { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .val { font-size: 1.2rem; font-weight: 800; color: #0f172a; display: block; margin-top: 5px; }
+        .highlight { color: var(--success); font-size: 1.5rem; }
+
+        /* Description for SEO (Needed for Google Ads Approval) */
+        .info-section { margin-top: 40px; line-height: 1.6; color: #475569; font-size: 0.95rem; }
     </style>
 </head>
 <body>
 
-<div class="calc-card">
-    <h2>Loan Calculator</h2>
-    <label>Loan Amount ($)</label>
-    <input type="number" id="amount" placeholder="e.g. 10000">
-    
-    <label>Interest Rate (%)</label>
-    <input type="number" id="interest" placeholder="e.g. 5.5">
-    
-    <label>Loan Term (Years)</label>
-    <input type="number" id="years" placeholder="e.g. 5">
+<div class="container">
+    <div class="calc-card">
+        <h2>Loan Calculator</h2>
+        
+        <div class="input-group">
+            <label>Loan Amount ($)</label>
+            <input type="number" id="amount" placeholder="e.g. 10000">
+        </div>
+        
+        <div class="input-group">
+            <label>Interest Rate (% Annual)</label>
+            <input type="number" id="interest" step="0.1" placeholder="e.g. 7.5">
+        </div>
+        
+        <div class="input-group">
+            <label>Tenure (Years)</label>
+            <input type="number" id="years" placeholder="e.g. 5">
+        </div>
 
-    <button onclick="calculateLoan()">Calculate Monthly Payment</button>
+        <button onclick="calculateLoan()">Analyze Loan</button>
 
-    <div id="resultBox" class="result">
-        <p>Monthly Payment:</p>
-        <h3 id="monthlyPayment">$0.00</h3>
+        <div id="resultGrid" class="result-grid">
+            <div class="result-item full-width">
+                <span class="label-sm">Monthly Payment</span>
+                <span id="monthlyPayment" class="val highlight">$0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="label-sm">Total Interest</span>
+                <span id="totalInterest" class="val">$0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="label-sm">Total Repayment</span>
+                <span id="totalPayment" class="val">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h3>How to use this Personal Loan Calculator</h3>
+        <p>This tool helps you estimate your monthly payments based on the principal amount, the interest rate offered by your bank, and the tenure (term) of the loan. Knowing the <strong>total interest paid</strong> helps you decide if a loan is affordable over the long term.</p>
     </div>
 </div>
 
 <script>
     function calculateLoan() {
-        const P = document.getElementById('amount').value;
-        const r = (document.getElementById('interest').value / 100) / 12;
-        const n = document.getElementById('years').value * 12;
+        const P = parseFloat(document.getElementById('amount').value);
+        const annualRate = parseFloat(document.getElementById('interest').value);
+        const r = (annualRate / 100) / 12;
+        const n = parseFloat(document.getElementById('years').value) * 12;
 
-        if (P && r && n) {
+        if (P > 0 && annualRate > 0 && n > 0) {
+            // Monthly Payment Formula
             const x = Math.pow(1 + r, n);
             const monthly = (P * x * r) / (x - 1);
             
-            document.getElementById('monthlyPayment').innerText = '$' + monthly.toFixed(2);
-            document.getElementById('resultBox').style.display = 'block';
+            // Total Calculations
+            const totalPay = monthly * n;
+            const totalInt = totalPay - P;
+
+            // Display results
+            document.getElementById('monthlyPayment').innerText = '$' + monthly.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('totalInterest').innerText = '$' + totalInt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('totalPayment').innerText = '$' + totalPay.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            document.getElementById('resultGrid').style.display = 'grid';
         } else {
-            alert("Please fill in all fields");
+            alert("Please enter valid positive numbers in all fields.");
         }
     }
 </script>
